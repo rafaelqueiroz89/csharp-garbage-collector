@@ -1,4 +1,4 @@
-# Threads-in-CSharp
+# Threads in C# 7
 
 This is a small repository about Threads in C#. It is for academic research only. All examples are Console friendly.
 
