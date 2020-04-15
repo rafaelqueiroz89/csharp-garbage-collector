@@ -4,6 +4,13 @@ Documentation can be found here: https://docs.microsoft.com/en-us/dotnet/standar
 
 This repository has 2 projects, one Main project with some examples and benchmarks, the second one is for common stuff. 
 
+## Tech stack
+
+.Net Core console application and Visual Studio Code.
+
+## How to run the examples and see the results
+
+Just set the GarbageCollector project to startup project, select the option to see the results benchmark. Also try to use a profiling tool to see the Heap and the GC moves between generations. 
 
 ## Diagrams
 
@@ -11,7 +18,6 @@ This repository has 2 projects, one Main project with some examples and benchmar
 
 ![](https://docs.microsoft.com/pt-br/dotnet/standard/garbage-collection/media/fundamentals/background-server-garbage-collection.png)
   
-
 ## Rules to follow to write better code
 
 - Avoid using boxing and unboxing
