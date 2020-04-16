@@ -13,7 +13,7 @@ namespace csharp_garbage_collector
                 text += i;
             }
 
-            GetGCGeneration(text, $"Concatenate String");
+            GetGCGenerationAndCollect(text, $"Concatenate String");
         }
 
         private static void StringBuilder()
@@ -25,7 +25,7 @@ namespace csharp_garbage_collector
                 stringBuilder.Append(i);
             }
 
-            GetGCGeneration(stringBuilder, $"Concatenate String Builder");
+            GetGCGenerationAndCollect(stringBuilder, $"Concatenate String Builder");
         }
     }
 }

@@ -9,7 +9,7 @@
                 _ = (int)item;
             }
 
-            GetGCGeneration(item, $"With boxing and unboxing");
+            GetGCGenerationAndCollect(item, $"With boxing and unboxing");
         }
 
         private static void WithoutBoxingUnboxing(int item)
@@ -19,7 +19,7 @@
                 _ = item;
             }
 
-            GetGCGeneration(item, $"With value type declaration");
+            GetGCGenerationAndCollect(item, $"With value type declaration");
         }
     }
 }

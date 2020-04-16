@@ -13,7 +13,7 @@ namespace csharp_garbage_collector
 
             list.Clear();
 
-            GetGCGeneration(list, $"Operations with classes");
+            GetGCGenerationAndCollect(list, $"Operations with classes");
         }
 
         private static void StructCall(List<StructFoo> list)
@@ -24,7 +24,7 @@ namespace csharp_garbage_collector
             }
             list.Clear();
 
-            GetGCGeneration(list, $"Operations with structs");
+            GetGCGenerationAndCollect(list, $"Operations with structs");
         }
     }
 }

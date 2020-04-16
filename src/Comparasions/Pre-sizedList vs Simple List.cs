@@ -13,7 +13,7 @@ namespace csharp_garbage_collector
                 list.Add(i);
             }
 
-            GetGCGeneration(list, $"List");
+            GetGCGenerationAndCollect(list, $"List");
         }
 
         private static void PreSizedList()
@@ -25,7 +25,7 @@ namespace csharp_garbage_collector
                 list.Add(i);
             }
 
-            GetGCGeneration(list, $"Pre-sized list");
+            GetGCGenerationAndCollect(list, $"Pre-sized list");
         }
     }
 }
