@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace csharp_garbage_collector
 {
-    internal static class Program
+    internal static partial class Program
     {
         private const int items = 3000;
-        private const int iterations = int.MaxValue;
+        private const int iterations = int.MaxValue / 2;
 
-        private static void GetGCGeneration<T>(T obj, string op)
+        private static void GetGCGenerationAndCollect<T>(T obj, string op)
         {
             long memorySnapshot1 = GC.GetTotalMemory(false);
 
@@ -27,7 +26,7 @@ namespace csharp_garbage_collector
                  ");
         }
 
-        private static void Main(string[] args)
+        private static void Main()
         {
             bool showMenu = true;
             while (showMenu)
@@ -43,7 +42,9 @@ namespace csharp_garbage_collector
             Console.WriteLine("1 - Boxing and Unboxing operation");
             Console.WriteLine("2 - String and String Builder concatenation");
             Console.WriteLine("3 - List and Pre-sized List");
-            Console.WriteLine("4 - Exit");
+            Console.WriteLine("4 - Class and Struct");
+
+            Console.WriteLine("5 - Exit");
 
             Console.Write("\r\nSelect an option: ");
 
@@ -61,95 +62,20 @@ namespace csharp_garbage_collector
 
                 case "3":
                     PreSizedList();
-                    List();
+                    ListFoo();
                     return true;
 
                 case "4":
+                    ClassCall(new List<ClassFoo>());
+                    StructCall(new List<StructFoo>());
+                    return true;
+
+                case "5":
                     return false;
 
                 default:
                     return true;
             }
         }
-
-        #region Pre-sized list vs Simple list
-
-        private static void List()
-        {
-            List<int> list = new List<int>();
-
-            for (int i = 0; i < items; i++)
-            {
-                list.Add(i);
-            }
-
-            GetGCGeneration(list, $"List");
-        }
-
-        private static void PreSizedList()
-        {
-            List<int> list = new List<int>(items);
-
-            for (int i = 0; i < items; i++)
-            {
-                list.Add(i);
-            }
-
-            GetGCGeneration(list, $"Pre-sized list");
-        }
-
-        #endregion Pre-sized list vs Simple list
-
-        #region Concatenate with obj string vs String Builder
-
-        private static void ConcatenateString()
-        {
-            string text = "";
-
-            for (int i = 0; i < iterations; i++)
-            {
-                text += i;
-            }
-
-            GetGCGeneration(text, $"Concatenate String");
-        }
-
-        private static void StringBuilder()
-        {
-            StringBuilder stringBuilder = new StringBuilder();
-
-            for (int i = 0; i < iterations; i++)
-            {
-                stringBuilder.Append(i);
-            }
-
-            GetGCGeneration(stringBuilder, $"Concatenate String Builder");
-        }
-
-        #endregion Concatenate with obj string vs String Builder
-
-        #region Boxing and Unboxing vs Avoiding it
-
-        private static void WithBoxingUnboxing(object item)
-        {
-            for (int i = 0; i < iterations; i++)
-            {
-                _ = (int)item;
-            }
-
-            GetGCGeneration(item, $"With boxing and unboxing");
-        }
-
-        private static void WithoutBoxingUnboxing(int item)
-        {
-            for (int i = 0; i < iterations; i++)
-            {
-                _ = item;
-            }
-
-            GetGCGeneration(item, $"With value type declaration");
-        }
-
-        #endregion Boxing and Unboxing vs Avoiding it
     }
 }

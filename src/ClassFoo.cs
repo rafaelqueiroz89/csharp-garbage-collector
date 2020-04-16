@@ -1,17 +1,13 @@
-﻿using System.Collections.Generic;
-
-namespace csharp_garbage_collector
+﻿namespace csharp_garbage_collector
 {
     internal class ClassFoo
     {
-        public readonly int Index;
-        public readonly List<double> ListDoubles;
-        public string Name;
+        private readonly int Index;
+        private readonly string Name;
 
-        public ClassFoo(int index, List<double> listDoubles, string name)
+        public ClassFoo(int index, string name)
         {
             Index = index;
-            ListDoubles = listDoubles;
             Name = name;
         }
     }
