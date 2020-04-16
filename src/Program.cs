@@ -1,46 +1,29 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.Text;
 
 namespace csharp_garbage_collector
 {
     internal static class Program
     {
-        private const int _iterations = 10000000;
-
-        private static void ConcatenateString()
-        {
-            StringBuilder stringBuilder = new StringBuilder();
-
-            for (int i = 0; i < 50; i++)
-            {
-                stringBuilder.Append(i);
-            }
-
-            GetGCGeneration(stringBuilder, $"Concatenate String");
-        }
+        private const int items = 3000;
+        private const int iterations = int.MaxValue;
 
         private static void GetGCGeneration<T>(T obj, string op)
         {
-            Stopwatch stopwatch = Stopwatch.StartNew();
-            double memorySnapshot1 = (GC.GetTotalMemory(false) / 1024f);
-
-            stopwatch.Start();
+            long memorySnapshot1 = GC.GetTotalMemory(false);
 
             GC.SuppressFinalize(obj);
             GC.Collect(2, GCCollectionMode.Forced);
+            GC.WaitForPendingFinalizers();
 
-            stopwatch.Stop();
-
-            double memorySnapshot2 = (GC.GetTotalMemory(false) / 1024f);
+            long memorySnapshot2 = GC.GetTotalMemory(false);
 
             Console.WriteLine(
                 @$"
                     Operation: {op}
-                    Memory allocated before GC {memorySnapshot1} bytes
-                    Memory after GC {memorySnapshot2} bytes
-                    Object disposed on Gen: {GC.GetGeneration(obj)}
-                    Done in {stopwatch.Elapsed.TotalMilliseconds} ms
+                    Difference of memory used before and after GC {Math.Abs(memorySnapshot1 - memorySnapshot2)} bytes
+                    Object deallocated on Gen: {GC.GetGeneration(obj)}
                  ");
         }
 
@@ -59,14 +42,16 @@ namespace csharp_garbage_collector
             Console.WriteLine("Choose an option:");
             Console.WriteLine("1 - Boxing and Unboxing operation");
             Console.WriteLine("2 - String and String Builder concatenation");
-            Console.WriteLine("3 - Exit");
+            Console.WriteLine("3 - List and Pre-sized List");
+            Console.WriteLine("4 - Exit");
+
             Console.Write("\r\nSelect an option: ");
 
             switch (Console.ReadLine())
             {
                 case "1":
-                    WithBoxingUnboxing(100);
-                    WithoutBoxingUnboxing(100);
+                    WithBoxingUnboxing(items);
+                    WithoutBoxingUnboxing(items);
                     return true;
 
                 case "2":
@@ -75,7 +60,11 @@ namespace csharp_garbage_collector
                     return true;
 
                 case "3":
+                    PreSizedList();
+                    List();
+                    return true;
 
+                case "4":
                     return false;
 
                 default:
@@ -83,21 +72,67 @@ namespace csharp_garbage_collector
             }
         }
 
-        private static void StringBuilder()
+        #region Pre-sized list vs Simple list
+
+        private static void List()
+        {
+            List<int> list = new List<int>();
+
+            for (int i = 0; i < items; i++)
+            {
+                list.Add(i);
+            }
+
+            GetGCGeneration(list, $"List");
+        }
+
+        private static void PreSizedList()
+        {
+            List<int> list = new List<int>(items);
+
+            for (int i = 0; i < items; i++)
+            {
+                list.Add(i);
+            }
+
+            GetGCGeneration(list, $"Pre-sized list");
+        }
+
+        #endregion Pre-sized list vs Simple list
+
+        #region Concatenate with obj string vs String Builder
+
+        private static void ConcatenateString()
         {
             string text = "";
 
-            for (int i = 0; i < 50; i++)
+            for (int i = 0; i < iterations; i++)
             {
                 text += i;
             }
 
-            GetGCGeneration(text, $"Concatenate String Builder");
+            GetGCGeneration(text, $"Concatenate String");
         }
+
+        private static void StringBuilder()
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            for (int i = 0; i < iterations; i++)
+            {
+                stringBuilder.Append(i);
+            }
+
+            GetGCGeneration(stringBuilder, $"Concatenate String Builder");
+        }
+
+        #endregion Concatenate with obj string vs String Builder
+
+        #region Boxing and Unboxing vs Avoiding it
 
         private static void WithBoxingUnboxing(object item)
         {
-            for (int i = 0; i < _iterations; i++)
+            for (int i = 0; i < iterations; i++)
             {
                 _ = (int)item;
             }
@@ -107,12 +142,14 @@ namespace csharp_garbage_collector
 
         private static void WithoutBoxingUnboxing(int item)
         {
-            for (int i = 0; i < _iterations; i++)
+            for (int i = 0; i < iterations; i++)
             {
                 _ = item;
             }
 
             GetGCGeneration(item, $"With value type declaration");
         }
+
+        #endregion Boxing and Unboxing vs Avoiding it
     }
 }
