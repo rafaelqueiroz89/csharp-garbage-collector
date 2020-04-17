@@ -22,7 +22,7 @@ By doing that we will see how much memory the whole cycle took (operations + gar
 
 ![](img/boxing_and_unboxing2.PNG)
 
-In the last image we can see how much the entire operation took.
+In the last image we can see how much time the entire operation took.
 
 We can conclude that the use of boxing and unboxing is at least 2.9 times slower than not using it for simillar operations.
 
