@@ -60,9 +60,11 @@ Generation 2 — Finally, this is the generation that holds objects that live th
 
 According to the Microsoft docs, the following information is what GC uses to determine if an object is live:
 
-    Stack roots. Stack variables provided by the just-in-time (JIT) compiler and stack walker. Note that JIT optimizations can lengthen or shorten regions of code within which stack variables are reported to the garbage collector.
-    Garbage collection handles. Handles that point to managed objects and that can be allocated by user code or by the common language runtime.
-    Static data. Static objects in application domains that could be referencing other objects. Each application domain keeps track of its static objects."
+Stack roots. Stack variables provided by the just-in-time (JIT) compiler and stack walker. Note that JIT optimizations can lengthen or shorten regions of code within which stack variables are reported to the garbage collector.
+
+Garbage collection handles. Handles that point to managed objects and that can be allocated by user code or by the common language runtime.
+
+Static data. Static objects in application domains that could be referencing other objects. Each application domain keeps track of its static objects."
 	
 Source: https://stackify.com/c-garbage-collection/
 
