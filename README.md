@@ -18,8 +18,9 @@ The console application will trigger events that are simillar, in our example of
 
 By doing that we will see how much memory the whole cycle took (operations + garbage collector + calls), the difference is taken from 2 snapshots, before and after the Garbage Collector and also in which generation the object was swept off. But the real deal is when we put the execution in a profiler. Let's take a look:
 
-![](img/boxing and unboxing.PNG)
-![](img/boxing and unboxing2.PNG)
+![](img/boxing_and_unboxing.PNG)
+
+![](img/boxing_and_unboxing2.PNG)
 
 In the last image we can see how much the entire operation took.
 
