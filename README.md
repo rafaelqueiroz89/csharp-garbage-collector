@@ -16,14 +16,31 @@ The console application will trigger events that are simillar, in our example of
 
 <code>GC.Collect(2, GCCollectionMode.Forced);</code>
 
-By doing that we will see how much memory the whole cycle took (operations + garbage collector + calls), the difference is taken from 2 snapshots, before and after the Garbage Collector. But the real deal is when we put the execution in a profiler. Let's take a look:
+By doing that we will see how much memory the whole cycle took (operations + garbage collector + calls), the difference is taken from 2 snapshots, before and after the Garbage Collector and also in which generation the object was swept off. But the real deal is when we put the execution in a profiler. Let's take a look:
+
+![](img/boxing_and_unboxing.PNG)
+
+![](img/boxing_and_unboxing2.PNG)
+
+In the last image we can see how much the entire operation took.
 
 We can conclude that the use of boxing and unboxing is at least 2.9 times slower than not using it for simillar operations.
 
-Let's take a look of another example, the use of pre-sized lists.
+Let's take a look of another example, the use of pre-sized lists:
 
-We can conclude that the use of pre-sized lists can speed your code up to times ! That's huge, so use it whenever you can :)
+Here we can see the difference of allocated memory, pre-sized lists are way more performatic
+![](img/lists.PNG)
 
+But we cannot say the same for a simple generic list
+![](img/listspayload.PNG)
+
+Here we can see that the whole operation for pre-sized list was 0ms
+![](img/presizedlistspayload.PNG)
+ 
+Can you spot the difference? The adition of elements in a default list makes it enlarge and ensure that the new capacity is enough to hold all the elements.
+
+We can conclude that the use of pre-sized lists can speed your code up to 3 times ! That's huge, so use it whenever you can :)
+The same is also valid for any type of collection.
 
 ## Diagrams
 
@@ -35,11 +52,11 @@ We can conclude that the use of pre-sized lists can speed your code up to times 
 
 "Memory is divided into spaces called generations. The collector starts claiming objects in the youngest generation. Then it promotes the survivors to the next generation. The C# garbage collection uses three generations in total:
 
-    Generation 0—This generation holds short-lived objects. Here’s where the collection process happens most often. When you instantiate a new object, it goes in this generation by default. The exceptions are objects whose sizes are equal to or greater than 85,000 bytes. Those objects are large, so they go straight into generation 2.
+Generation 0 — This generation holds short-lived objects. Here’s where the collection process happens most often. When you instantiate a new object, it goes in this generation by default. The exceptions are objects whose sizes are equal to or greater than 85,000 bytes. Those objects are large, so they go straight into generation 2.
 	
-    Generation 1—This is an intermediate space between the short-lived and long-lived layers.
+Generation 1 — This is an intermediate space between the short-lived and long-lived layers.
 	
-    Generation 2—Finally, this is the generation that holds objects that live the longest in the application—sometimes as long as the whole duration of the app. GC takes place here less frequently.
+Generation 2 — Finally, this is the generation that holds objects that live the longest in the application—sometimes as long as the whole duration of the app. GC takes place here less frequently.
 
 According to the Microsoft docs, the following information is what GC uses to determine if an object is live:
 
